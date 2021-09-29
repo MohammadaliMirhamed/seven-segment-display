@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Seven-segment display</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link href="https://cdn.rawgit.com/mochajs/mocha/2.2.5/mocha.css" rel="stylesheet" />
+    <script src="https://cdn.rawgit.com/Automattic/expect.js/0.3.1/index.js"></script>
+    <script src="https://cdn.rawgit.com/chaijs/chai/3.5.0/chai.js"></script>
+    <script src="https://cdn.rawgit.com/mochajs/mocha/2.2.5/mocha.js"></script>
+</head>
+
+<body>
+    <div id="mocha"></div>
+</body>
+
+</html>
+
+
+<script>
+    var segmentPattern = {
+        0: 6,
+        1: 2,
+        2: 5,
+        3: 5,
+        4: 4,
+        5: 5,
+        6: 6,
+        7: 3,
+        8: 7,
+        9: 6,
+    };
+
+    function sevenSegmentDisplay(time) {
+
+        var Timearray = time.split(':');
+
+
+        if ((parseInt(Timearray[0]) >= 0 && parseInt(Timearray[0]) <= 23) && (parseInt(Timearray[1]) >= 0 && parseInt(Timearray[1]) <= 59)) {
+
+
+            // left side time numbers
+            var leftSide = Timearray[0].toString().split('').map(iNum => parseInt(iNum, 10));
+            //right side time numbers
+            var RightSide = Timearray[1].toString().split('').map(iNum => parseInt(iNum, 10));
+            //merge Array
+            var FinalArray = leftSide.concat(RightSide);
+
+
+            var sum = 0;
+
+            for (const [key, value] of Object.entries(FinalArray)) {
+                sum += segmentPattern[value];
+            }
+
+            return sum;
+        }
+
+    }
+
+    //Unint Tests
+    const mocha = window.mocha;
+    mocha.setup('bdd');
+
+    const chai = window.chai
+    const expect = chai.expect
+
+    describe('Seven-segment display', () => {
+        it('determine the time how many segments has been used', () => {
+            expect(sevenSegmentDisplay("11:11")).to.deep.equal(8);
+        })
+    })
+
+    mocha.checkLeaks();
+    mocha.run();
+</script>
